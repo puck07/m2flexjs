@@ -16,7 +16,9 @@ let boardPositionSize = 50;
 let pawnPositions = [];
 let boardPositions = [];
 let playerAmountButtons = [];
-let uiWindow = createRect(600,200,300,300);
+let uiWindow = createRect(600, 200, 300, 300);
+let images={};
+
 function createRect(x, y, w, h) {
     let rectangle = {
         x: x,
@@ -36,18 +38,12 @@ function clearCanvas() {
 
 function draw() {
     clearCanvas();
-    if(gameState == gamestate_start)
-    {
+    if (gameState == gamestate_start) {
         drawGameStart();
     }
-    else if(gameState == gamesstate_ingame)
-    {
+    else if (gameState == gamesstate_ingame) {
         drawIngame();
     }
-
-
-        
-    
 }
 
 function createBoardPositions() {
@@ -73,46 +69,78 @@ function createBoardPositions() {
     }
 }
 
-function drawGameStart(){
-    for(let i=0 ; i<playerAmountButtons.length;i++)
-    {
+function drawGameStart() {
+    for (let i = 0; i < playerAmountButtons.length; i++) {
         let pos = playerAmountButtons[i];
 
         g.fillStyle = "#004400";
-        g.fillRect  (pos.x,pos.y,pos.w,pos.h);
+        g.fillRect(pos.x, pos.y, pos.w, pos.h);
         g.fillStyle = "#FFFFFF";
-        g.fillText((i+1)+"",pos.x,pos.y+20);
-       
-        
-
+        g.fillText((i + 1) + "", pos.x, pos.y + 20);
+        g.drawImage(images["pawn"+i+".png"],pos.x,pos.y,pos.w,pos.h)
     }
-    g.fillText('Click the amount of players to start', uiWindow.x,uiWindow.y);
+    g.fillText("Click the amount of players to start", uiWindow.x, uiWindow.y);
+   
 };
 
 function drawIngame() {
-    for(let i=0 ; i<boardPositions.length;i++)
-    {
+    for (let i = 0; i < boardPositions.length; i++) {
         let pos = boardPositions[i];
 
         g.fillStyle = "#004400";
-        g.fillRect  (pos.x,pos.y,pos.w,pos.h);
+        g.fillRect(pos.x, pos.y, pos.w, pos.h);
         g.fillStyle = "#FFFFFF";
-        g.fillText((i+1)+"",pos.x,pos.y+20);
+        g.fillText((i + 1) + "", pos.x, pos.y + 20);
     }
 };
 
 
 function initGame() {
     createBoardPositions();
-     for (let index = 0; index < 4; index++) {
-          let button = createRect(uiWindow.x+5+ (index*50) , uiWindow.y+50,50,50);
-          button.playerAmount=index+1;
-          playerAmountButtons.push(button);
-     } 
+    for (let index = 0; index < 4; index++) {
+        let button = createRect(uiWindow.x + 5 + (index * 50), uiWindow.y + 50, 50, 50);
+        button.playerAmount = index + 1;
+        playerAmountButtons.push(button);
+    }
+
 }
 
-initGame();
-    
-draw();
-drawGameStart();
+function loadImages()
+{
+    let sources = [
+        "img/dice1.png", "img/dice2.png", "img/dice3.png", "img/dice4.png", "img/dice5.png", "img/dice6.png",
+        "img/pawn0.png", "img/pawn1.png", "img/pawn2.png", "img/pawn3.png", 
+        "img/snakes.png", 
+        "img/trophy.png", 
+        "img/window.png", 
+    ]
+    let scope = this;
 
+    let loaded = 0;
+    for (let i = 0; i < sources.length; i++)
+    {
+        let img = new Image();
+
+
+        img.onload = function ()
+        {
+            loaded++;
+            if (loaded == sources.length)
+            {
+                imagesLoaded();
+            }
+        };
+        img.src = sources[i];
+
+        images[ sources[i].replace("img/","")] = img;
+    }
+}
+
+function imagesLoaded(){
+    initGame();
+    draw();
+}
+
+
+loadImages();
+drawGameStart();
