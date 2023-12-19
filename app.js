@@ -168,7 +168,24 @@ function inRect(px,py,rect)
 }
 
 function startGame(playerAmount){
+    gameState = gamesstate_ingame;
+    ingameState = ingamestate_start;
+    pawnPositions=[]; 
+    playerTurn= 0;
+    winner=-1;
+    console.log("playerAmount " + playerAmount);
+    for(let i = 0; i < playerAmount; i++)
+    {
+        
 
+    }
+
+    draw();
+}
+
+function createPawn(playerI)
+{
+    return { boardI: 0,playerI:playerI};
 }
 
 loadImages();
